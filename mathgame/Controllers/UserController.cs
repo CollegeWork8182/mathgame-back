@@ -16,7 +16,9 @@ public class UserController(ILogger<UserController> logger) : ControllerBase
     /// <summary>
     /// Criar um novo usuário
     /// </summary>
-    /// <returns></returns>
+    /// <remarks>
+    /// Para as Roles temos as seguintes: 1 = ADMIN, 2 = PROFESSOR, 3 = STUDENT
+    /// </remarks>
     [AllowAnonymous]
     [HttpPost]
     public async Task<ActionResult<MessageSuccessDTO>> CreateUser([FromBody] CreateUserDTO data,

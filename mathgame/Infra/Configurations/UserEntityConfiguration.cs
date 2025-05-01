@@ -2,7 +2,7 @@ using mathgame.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace educationalapp.Infra.Configurations;
+namespace mathgame.Infra.Configurations;
 
 public class UserEntityConfiguration : IEntityTypeConfiguration<UserEntity>
 {

@@ -45,7 +45,7 @@ namespace mathgame.Infra.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("AccessCodes");
+                    b.ToTable("AccessCodes", (string)null);
                 });
 
             modelBuilder.Entity("mathgame.Entities.ProfileEntity", b =>
@@ -61,7 +61,7 @@ namespace mathgame.Infra.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Profiles");
+                    b.ToTable("Profiles", (string)null);
                 });
 
             modelBuilder.Entity("mathgame.Entities.UserEntity", b =>
@@ -92,7 +92,7 @@ namespace mathgame.Infra.Migrations
 
                     b.HasIndex("ProfileId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("mathgame.Entities.AccessCodeEntity", b =>
