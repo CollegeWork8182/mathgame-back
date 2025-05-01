@@ -22,10 +22,6 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<UserEntity>
             .HasMaxLength(150)
             .IsRequired();
 
-        builder.Property(x => x.PasswordChangeCode)
-            .HasMaxLength(30)
-            .IsRequired();
-
         builder.HasOne(x => x.Profile)
             .WithMany(x => x.Users)
             .HasForeignKey(x => x.ProfileId)

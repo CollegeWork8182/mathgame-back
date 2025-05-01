@@ -2,6 +2,7 @@ using mathgame.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ValidationException = FluentValidation.ValidationException;
 
 namespace mathgame.Config;
 
@@ -32,13 +33,13 @@ public class GlobalExceptionHandler : IExceptionHandler
             problemDetails.Detail = "Erro ao tentar salvar no banco de dados";
             problemDetails.Instance = httpContext.Request.Path;
         }
-        // else if(exception is ValidationException)
-        // {
-        //     problemDetails.Title = "Erro de validação";
-        //     problemDetails.Status = StatusCodes.Status400BadRequest;
-        //     problemDetails.Detail = exception.Message;
-        //     problemDetails.Instance = httpContext.Request.Path;
-        // }
+        else if(exception is ValidationException)
+        {
+            problemDetails.Title = "Erro de validação";
+            problemDetails.Status = StatusCodes.Status400BadRequest;
+            problemDetails.Detail = exception.Message;
+            problemDetails.Instance = httpContext.Request.Path;
+        }
 
         httpContext.Response.StatusCode = problemDetails.Status.Value;
 
