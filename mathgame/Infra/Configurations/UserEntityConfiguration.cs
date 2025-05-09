@@ -26,5 +26,15 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<UserEntity>
             .WithMany(x => x.Users)
             .HasForeignKey(x => x.ProfileId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasMany(x => x.Rooms)
+            .WithOne(x => x.User)
+            .HasForeignKey(x => x.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasOne(x => x.Participant)
+            .WithOne(x => x.User)
+            .HasForeignKey<ParticipantEntity>(x => x.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

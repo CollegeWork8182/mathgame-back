@@ -8,8 +8,9 @@ public class UserEntity
     public string Password {get; set;} = string.Empty;
     public AccessCodeEntity AccessCode { get; set; }
     public ProfileEntity Profile { get; set; } = null!;
-    
     public long ProfileId { get; set; }
+    public ICollection<RoomEntity>? Rooms { get; set; } = null!;
+    public ParticipantEntity? Participant { get; set; } = null!;
     
     public UserEntity() { }
 
