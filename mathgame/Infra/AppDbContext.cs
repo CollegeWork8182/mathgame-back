@@ -14,6 +14,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<QuestionEntity> Questions { get; set; }
     public DbSet<ResponseEntity> Responses { get; set; }
     public DbSet<ParticipantEntity> Participants { get; set; }
+    public DbSet<OperationDifficultiesEntity> OperationDifficulties { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);

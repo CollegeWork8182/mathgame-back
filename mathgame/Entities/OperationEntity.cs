@@ -4,19 +4,19 @@
     {
         public long Id { get; set; }
         public string Title { get; set; } = string.Empty;
-        public ICollection<DifficultyEntity> Difficulties { get; set; } = null!;
+        public ICollection<OperationDifficultiesEntity> OperationDifficulties { get; set; } = null!;
         public ICollection<QuestionEntity> Questions { get; set; } = null!;
         public OperationEntity() { }
-        public OperationEntity(long id, string title, ICollection<DifficultyEntity> difficulties, ICollection<QuestionEntity> questions) {
+        public OperationEntity(long id, string title, ICollection<OperationDifficultiesEntity> operationDifficulties, ICollection<QuestionEntity> questions) {
             Id = id;
             Title = title;
-            Difficulties = difficulties;
+            OperationDifficulties = operationDifficulties;
             Questions = questions;
         }
-        public OperationEntity(string title, ICollection<DifficultyEntity> difficulties, ICollection<QuestionEntity> questions)
+        public OperationEntity(string title, ICollection<OperationDifficultiesEntity> operationDifficulties, ICollection<QuestionEntity> questions)
         {
             Title = title;
-            Difficulties = difficulties;
+            OperationDifficulties = operationDifficulties;
             Questions = questions;
         }
     }

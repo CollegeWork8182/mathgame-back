@@ -15,10 +15,11 @@
             QtdResponses = qtdResponses;
             Responses = responses;
         }
-        public ParticipantEntity(long qtdResponses, ICollection<ResponseEntity> responses)
+        public ParticipantEntity(UserEntity user, ICollection<ResponseEntity>? responses, long qtdResponses = 0)
         {
-            QtdResponses = qtdResponses;
+            User = user;
             Responses = responses;
+            QtdResponses = qtdResponses;
         }
     }
 }

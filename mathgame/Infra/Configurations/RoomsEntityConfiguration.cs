@@ -29,7 +29,6 @@ namespace mathgame.Infra.Configurations
             builder.HasMany(x => x.Participants)
                 .WithMany(x => x.Rooms)
                 .UsingEntity(x => x.ToTable("Room_Participants"));
-                
         }
     }
 }

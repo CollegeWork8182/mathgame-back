@@ -20,6 +20,14 @@ public class UserRepositoryGateway(AppDbContext context) : IUserGateway
             .FirstOrDefaultAsync(x => x.Email == email);
     }
 
+    public async Task<UserEntity?> FindById(long id)
+    {
+        return await context.Users
+            .Include(x => x.Profile)
+            .Include(x => x.AccessCode)
+            .FirstOrDefaultAsync(x => x.Id == id);
+    }
+
     public async Task Update(UserEntity user)
     {
         context.Update(user);

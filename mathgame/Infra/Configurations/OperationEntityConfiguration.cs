@@ -18,10 +18,6 @@ namespace mathgame.Infra.Configurations
                 .WithOne(x => x.Operation)
                 .HasForeignKey(x => x.OperationId)
                 .OnDelete(DeleteBehavior.Cascade);
-
-            builder.HasMany(x => x.Difficulties)
-                .WithMany(x => x.Operations)
-                .UsingEntity(x => x.ToTable("Operation_Difficulties"));
         }
     }
 }

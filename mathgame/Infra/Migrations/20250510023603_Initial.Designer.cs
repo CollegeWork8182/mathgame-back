@@ -11,29 +11,14 @@ using mathgame.Infra;
 namespace mathgame.Infra.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250509192925_AddTablesToRoomsLogic")]
-    partial class AddTablesToRoomsLogic
+    [Migration("20250510023603_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.15");
-
-            modelBuilder.Entity("DifficultyEntityOperationEntity", b =>
-                {
-                    b.Property<long>("DifficultiesId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<long>("OperationsId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("DifficultiesId", "OperationsId");
-
-                    b.HasIndex("OperationsId");
-
-                    b.ToTable("Operation_Difficulties", (string)null);
-                });
 
             modelBuilder.Entity("ParticipantEntityRoomEntity", b =>
                 {
@@ -95,6 +80,27 @@ namespace mathgame.Infra.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Difficulties");
+                });
+
+            modelBuilder.Entity("mathgame.Entities.OperationDifficultiesEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long>("DifficultyId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long>("OperationId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DifficultyId");
+
+                    b.HasIndex("OperationId");
+
+                    b.ToTable("Operation_Difficulties", (string)null);
                 });
 
             modelBuilder.Entity("mathgame.Entities.OperationEntity", b =>
@@ -236,7 +242,7 @@ namespace mathgame.Infra.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("TEXT");
 
-                    b.Property<long>("DifficultyId")
+                    b.Property<long>("OperationDifficultiesId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Status")
@@ -254,7 +260,8 @@ namespace mathgame.Infra.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DifficultyId");
+                    b.HasIndex("OperationDifficultiesId")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -292,21 +299,6 @@ namespace mathgame.Infra.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("DifficultyEntityOperationEntity", b =>
-                {
-                    b.HasOne("mathgame.Entities.DifficultyEntity", null)
-                        .WithMany()
-                        .HasForeignKey("DifficultiesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("mathgame.Entities.OperationEntity", null)
-                        .WithMany()
-                        .HasForeignKey("OperationsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("ParticipantEntityRoomEntity", b =>
                 {
                     b.HasOne("mathgame.Entities.ParticipantEntity", null)
@@ -330,6 +322,25 @@ namespace mathgame.Infra.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("mathgame.Entities.OperationDifficultiesEntity", b =>
+                {
+                    b.HasOne("mathgame.Entities.DifficultyEntity", "Difficulty")
+                        .WithMany("OperationDifficulties")
+                        .HasForeignKey("DifficultyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("mathgame.Entities.OperationEntity", "Operation")
+                        .WithMany("OperationDifficulties")
+                        .HasForeignKey("OperationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Difficulty");
+
+                    b.Navigation("Operation");
                 });
 
             modelBuilder.Entity("mathgame.Entities.ParticipantEntity", b =>
@@ -372,9 +383,9 @@ namespace mathgame.Infra.Migrations
 
             modelBuilder.Entity("mathgame.Entities.RoomEntity", b =>
                 {
-                    b.HasOne("mathgame.Entities.DifficultyEntity", "Difficulty")
-                        .WithMany("Rooms")
-                        .HasForeignKey("DifficultyId")
+                    b.HasOne("mathgame.Entities.OperationDifficultiesEntity", "OperationDifficulties")
+                        .WithOne("Room")
+                        .HasForeignKey("mathgame.Entities.RoomEntity", "OperationDifficultiesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -384,7 +395,7 @@ namespace mathgame.Infra.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Difficulty");
+                    b.Navigation("OperationDifficulties");
 
                     b.Navigation("User");
                 });
@@ -402,11 +413,19 @@ namespace mathgame.Infra.Migrations
 
             modelBuilder.Entity("mathgame.Entities.DifficultyEntity", b =>
                 {
-                    b.Navigation("Rooms");
+                    b.Navigation("OperationDifficulties");
+                });
+
+            modelBuilder.Entity("mathgame.Entities.OperationDifficultiesEntity", b =>
+                {
+                    b.Navigation("Room")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("mathgame.Entities.OperationEntity", b =>
                 {
+                    b.Navigation("OperationDifficulties");
+
                     b.Navigation("Questions");
                 });
 
