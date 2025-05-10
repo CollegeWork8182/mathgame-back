@@ -20,7 +20,7 @@ public class RoomController : ControllerBase
     /// Para Operation temos: ADDITION, SUBTRACTION, MULTIPLICATION, DIVISION
     /// </remarks>
     [HttpPost]
-    [Authorize(Roles = "ADMIN, PROFESSOR, STUDENT")]
+    [Authorize(Roles = "ADMIN, PROFESSOR")]
     public async Task<ActionResult<MessageSuccessDTO>> Create([FromBody] CreateRoomDTO data, [FromServices] RoomService roomService)
     {
         var userIdClaim = User.FindFirst("userId")?.Value;
@@ -40,6 +40,7 @@ public class RoomController : ControllerBase
     /// Retornar todas as minhas salas criadas ou que já participei
     /// </summary>
     [HttpGet("all/me")]
+    [Authorize(Roles = "ADMIN, PROFESSOR, STUDENT")]
     public async Task<ActionResult<List<FindAllMyRoomsResponseDTO>>> FindAllMyRooms(
         [FromServices] RoomService roomService)
     {
@@ -58,7 +59,7 @@ public class RoomController : ControllerBase
     /// </remarks>
     /// <param name="roomId">Id da sala</param>
     [HttpPut("{roomId}")]
-    [Authorize(Roles = "ADMIN, PROFESSOR, STUDENT")]
+    [Authorize(Roles = "ADMIN, PROFESSOR")]
     public async Task<ActionResult<MessageSuccessDTO>> Update([FromBody] UpdateRoomDTO data, [FromRoute] long roomId, [FromServices] RoomService roomService)
     {
         var validator = new UpdateRoomValidator();
@@ -76,6 +77,7 @@ public class RoomController : ControllerBase
     /// </summary>
     /// <param name="roomId">Id da sala</param>
     [HttpGet("shareAccessCode/{roomId}")]
+    [Authorize(Roles = "ADMIN, PROFESSOR")]
     public async Task<ActionResult<ShareAccessCodeDTO>> ShareAccessCode([FromRoute] long roomId,
         [FromServices] RoomService roomService)
     {
@@ -88,6 +90,7 @@ public class RoomController : ControllerBase
     /// <param name="roomId">Id da sala</param>
     /// <returns></returns>
     [HttpPost("enter/{roomId}")]
+    [Authorize(Roles = "ADMIN, STUDENT")]
     public async Task<ActionResult<MessageSuccessDTO>> EnterTheRoom([FromRoute] long roomId,
         [FromServices] RoomService roomService)
     {
@@ -96,5 +99,15 @@ public class RoomController : ControllerBase
         
         await roomService.EnterTheRoom(roomId, long.Parse(userIdClaim));
         return Ok(new MessageSuccessDTO("Participação realizada com sucesso"));
+    }
+
+    /// <summary>
+    /// Retorna informações da sala por id
+    /// </summary>
+    /// <param name="roomId">Id da sala</param>
+    [HttpGet("{roomId}")]
+    public async Task<ActionResult<FindByRoomIdDTO>> FindById([FromRoute] long roomId, [FromServices] RoomService roomService)
+    {
+        return Ok(await roomService.FindById(roomId));
     }
 }

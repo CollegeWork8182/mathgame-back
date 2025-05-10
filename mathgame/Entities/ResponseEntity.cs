@@ -3,21 +3,21 @@
     public class ResponseEntity
     {
         public long Id { get; set; }
-        public string Correct { get; set; } = string.Empty;
-        public string Incorrect { get; set; } = string.Empty;
+        public bool Correct { get; set; } = false;
+        public bool Incorrect { get; set; } = false;
         public QuestionEntity Question { get; set; } = null!;
         public long QuestionId { get; set; }
         public ParticipantEntity Participant { get; set; } = null!;
         public long ParticipantId { get; set; }
         public ResponseEntity() { }
-        public ResponseEntity(long id, string correct)
+        public ResponseEntity(long id, bool correct)
         {
             Id = id;
             Correct = correct;
         }
-        public ResponseEntity(string correct)
+        public ResponseEntity(QuestionEntity question)
         {
-            Correct = correct;
+            Question = question;
         }
     }
 }

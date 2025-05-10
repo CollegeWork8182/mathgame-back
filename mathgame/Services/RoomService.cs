@@ -103,4 +103,12 @@ public class RoomService(IRoomGateway roomGateway, IUserGateway userGateway, IDi
 
         await roomGateway.Update(room);
     }
+
+    public async Task<FindByRoomIdDTO> FindById(long roomId)
+    {
+        var room = await roomGateway.FindById(roomId);
+
+        return new FindByRoomIdDTO(room.Id, room.Title, room.Description, room.OperationDifficulties.Operation.Title,
+            room.OperationDifficulties.Difficulty.Title, room.Code);
+    }
 }

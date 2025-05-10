@@ -24,7 +24,9 @@ public class RoomRepositoryGateway(AppDbContext context) : IRoomGateway
     public async Task<RoomEntity?> FindById(long roomId)
     {
         return await context.Rooms
-            .Include(x => x.OperationDifficulties)
+            .Include(x => x.OperationDifficulties).ThenInclude(x => x.Operation)
+            .Include(x => x.OperationDifficulties).ThenInclude(x => x.Difficulty)
+            .Include(x => x.Participants!).ThenInclude(x => x.Responses)
             .FirstOrDefaultAsync(x => x.Id == roomId);
     }
 

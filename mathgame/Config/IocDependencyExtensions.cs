@@ -19,5 +19,6 @@ public static class IocDependencyExtensions
         services.AddScoped<AuthService>();
         services.AddScoped<AccessCodeService>();
         services.AddScoped<RoomService>();
+        services.AddScoped<QuestionService>();
     }
 }
