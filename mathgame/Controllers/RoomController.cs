@@ -116,7 +116,7 @@ public class RoomController : ControllerBase
     /// Altera o status de uma sala
     /// </summary>
     /// <remarks>
-    /// Para o status temos: STARTED, FINISHED
+    /// Para o status temos: 2 = STARTED, 3 = FINISHED
     /// </remarks>
     /// <param name="roomId">Id da sala</param>
     [HttpPut("status/{roomId}")]

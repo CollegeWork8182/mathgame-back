@@ -2,7 +2,7 @@ namespace mathgame.Dtos.Enums;
 
 public enum StatusRoomType
 {
-    CREATED,
-    STARTED,
-    FINISHED
+    CREATED = 1,
+    STARTED = 2,
+    FINISHED = 3
 }
