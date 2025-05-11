@@ -57,9 +57,11 @@ public class RoomService(IRoomGateway roomGateway, IUserGateway userGateway, IDi
     public async Task UpdateRoom(UpdateRoomDTO data, long roomId)
     {
         var room = await roomGateway.FindById(roomId);
+        if(room is null)
+            throw new DomainException("Sala não encontrada");
         
-        if(room.Status.ToString() == StatusRoomType.FINISHED.ToString())
-            throw new DomainException("Turma finalizada");
+        if(room.Status.ToString() == StatusRoomType.FINISHED.ToString() || room.Status.ToString() == StatusRoomType.STARTED.ToString())
+            throw new DomainException("Turma finalizada ou já iniciada");
         
         var difficulty = await difficultyGateway.FindByTitle(data.Difficulty.ToString());
         if(difficulty is null)
@@ -81,22 +83,27 @@ public class RoomService(IRoomGateway roomGateway, IUserGateway userGateway, IDi
     public async Task<ShareAccessCodeDTO> ShareAccessCode(long roomId)
     {
         var room = await roomGateway.FindById(roomId);
+        if(room is null)
+            throw new DomainException("Sala não encontrada");
         if(room!.Status.ToString() == StatusRoomType.FINISHED.ToString() || room.Status.ToString() == StatusRoomType.STARTED.ToString())
-            throw new DomainException("Turma iniciada ou já finalizada");
+            throw new DomainException("Sala iniciada ou já finalizada");
         
         return new ShareAccessCodeDTO(room.Code);
     }
 
-    public async Task EnterTheRoom(long roomId, long userId)
+    public async Task EnterTheRoom(long roomId, long userId, string accessCode)
     {
         var room = await roomGateway.FindById(roomId);
-        if(room.Status.ToString() == StatusRoomType.STARTED.ToString() || room.Status.ToString() == StatusRoomType.FINISHED.ToString())
-            throw new DomainException("Turma já iniciada ou finalizada");
-        
         var user = await userGateway.FindById(userId);
 
         if (room == null || user == null)
             throw new DomainException("Erro ao adicionar usuário");
+        
+        if(room.Code.ToLower() != accessCode.ToLower())
+            throw new DomainException("Código de acesso inválido");
+        
+        if(room.Status.ToString() == StatusRoomType.STARTED.ToString() || room.Status.ToString() == StatusRoomType.FINISHED.ToString())
+            throw new DomainException("Turma já iniciada ou finalizada");
         
         if (room.Participants != null && room.Participants.Any(p => p.UserId == userId))
             throw new DomainException("Erro ao adicionar usuário");
@@ -116,6 +123,8 @@ public class RoomService(IRoomGateway roomGateway, IUserGateway userGateway, IDi
     public async Task<FindByRoomIdDTO> FindById(long roomId)
     {
         var room = await roomGateway.FindById(roomId);
+        if (room is null)
+            throw new DomainException("Sala não encontrada");
 
         return new FindByRoomIdDTO(room.Id, room.Title, room.Description, room.OperationDifficulties.Operation.Title,
             room.OperationDifficulties.Difficulty.Title, room.Code, room.Status);
@@ -126,8 +135,10 @@ public class RoomService(IRoomGateway roomGateway, IUserGateway userGateway, IDi
         var room = await roomGateway.FindById(roomId);
         
         if(status.ToString() == StatusRoomType.CREATED.ToString())
-            throw new DomainException("Essa turma já existe");
+            throw new DomainException("Não se pode alterar o status para CREATED em uma turma que já existe");
         
         room.Status = status.ToString();
+
+        await roomGateway.Update(room);
     }
 }

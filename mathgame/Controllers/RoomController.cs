@@ -47,7 +47,7 @@ public class RoomController : ControllerBase
         var userIdClaim = User.FindFirst("userId")?.Value;
         if (userIdClaim == null) return Unauthorized();
 
-        return Ok(roomService.FindAllMyRooms(long.Parse(userIdClaim)));
+        return Ok(await roomService.FindAllMyRooms(long.Parse(userIdClaim)));
     }
     
     /// <summary>
@@ -69,7 +69,7 @@ public class RoomController : ControllerBase
         
         await roomService.UpdateRoom(data, roomId);
 
-        return Ok(new MessageSuccessDTO("Sala criada com sucesso"));
+        return Ok(new MessageSuccessDTO("Sala atualizada com sucesso"));
     }
 
     /// <summary>
@@ -91,13 +91,18 @@ public class RoomController : ControllerBase
     /// <returns></returns>
     [HttpPost("enter/{roomId}")]
     [Authorize(Roles = "ADMIN, STUDENT")]
-    public async Task<ActionResult<MessageSuccessDTO>> EnterTheRoom([FromRoute] long roomId,
+    public async Task<ActionResult<MessageSuccessDTO>> EnterTheRoom([FromBody] EnterRoomDTO data, [FromRoute] long roomId,
         [FromServices] RoomService roomService)
     {
+        var validator = new EnterRoomValidator();
+        var validationResult = await validator.ValidateAsync(data);
+        if(!validationResult.IsValid)
+            throw new ValidationException(validationResult.Errors);
+        
         var userIdClaim = User.FindFirst("userId")?.Value;
         if (userIdClaim == null) return Unauthorized();
         
-        await roomService.EnterTheRoom(roomId, long.Parse(userIdClaim));
+        await roomService.EnterTheRoom(roomId, long.Parse(userIdClaim), data.accessCode);
         return Ok(new MessageSuccessDTO("Participação realizada com sucesso"));
     }
 

@@ -27,6 +27,7 @@ public class RoomRepositoryGateway(AppDbContext context) : IRoomGateway
             .Include(x => x.OperationDifficulties).ThenInclude(x => x.Operation)
             .Include(x => x.OperationDifficulties).ThenInclude(x => x.Difficulty)
             .Include(x => x.Participants!).ThenInclude(x => x.Responses)
+            .Include(x => x.OperationDifficulties).ThenInclude(x => x.Questions)
             .FirstOrDefaultAsync(x => x.Id == roomId);
     }
 

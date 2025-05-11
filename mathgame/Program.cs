@@ -19,7 +19,7 @@ builder.Services.AddDbContextExtension(builder.Configuration);
 builder.Services.AddCorsExtension();
 builder.Services.AddSwaggerExtension();
 builder.Services.AddIocDependencies();
-builder.Services.AddAuthentication();
+builder.Services.AddAuthenticationExtension(builder.Configuration);
 
 var app = builder.Build();
 
@@ -34,6 +34,7 @@ app.UseCors("CorsPolicy");
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseExceptionHandler();
