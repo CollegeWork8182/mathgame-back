@@ -58,6 +58,9 @@ public class RoomService(IRoomGateway roomGateway, IUserGateway userGateway, IDi
     {
         var room = await roomGateway.FindById(roomId);
         
+        if(room.Status.ToString() == StatusRoomType.FINISHED.ToString())
+            throw new DomainException("Turma finalizada");
+        
         var difficulty = await difficultyGateway.FindByTitle(data.Difficulty.ToString());
         if(difficulty is null)
             throw new DomainException("Erro ao atualizar informações");
@@ -78,19 +81,25 @@ public class RoomService(IRoomGateway roomGateway, IUserGateway userGateway, IDi
     public async Task<ShareAccessCodeDTO> ShareAccessCode(long roomId)
     {
         var room = await roomGateway.FindById(roomId);
+        if(room!.Status.ToString() == StatusRoomType.FINISHED.ToString() || room.Status.ToString() == StatusRoomType.STARTED.ToString())
+            throw new DomainException("Turma iniciada ou já finalizada");
+        
         return new ShareAccessCodeDTO(room.Code);
     }
 
     public async Task EnterTheRoom(long roomId, long userId)
     {
         var room = await roomGateway.FindById(roomId);
+        if(room.Status.ToString() == StatusRoomType.STARTED.ToString() || room.Status.ToString() == StatusRoomType.FINISHED.ToString())
+            throw new DomainException("Turma já iniciada ou finalizada");
+        
         var user = await userGateway.FindById(userId);
 
         if (room == null || user == null)
-            throw new Exception("Erro ao adicionar usuário");
+            throw new DomainException("Erro ao adicionar usuário");
         
         if (room.Participants != null && room.Participants.Any(p => p.UserId == userId))
-            throw new Exception("Erro ao adicionar usuário");
+            throw new DomainException("Erro ao adicionar usuário");
 
         var newParticipant = new ParticipantEntity(user, null);
 
@@ -109,6 +118,16 @@ public class RoomService(IRoomGateway roomGateway, IUserGateway userGateway, IDi
         var room = await roomGateway.FindById(roomId);
 
         return new FindByRoomIdDTO(room.Id, room.Title, room.Description, room.OperationDifficulties.Operation.Title,
-            room.OperationDifficulties.Difficulty.Title, room.Code);
+            room.OperationDifficulties.Difficulty.Title, room.Code, room.Status);
+    }
+
+    public async Task UpdateStatus(long roomId, StatusRoomType status)
+    {
+        var room = await roomGateway.FindById(roomId);
+        
+        if(status.ToString() == StatusRoomType.CREATED.ToString())
+            throw new DomainException("Essa turma já existe");
+        
+        room.Status = status.ToString();
     }
 }

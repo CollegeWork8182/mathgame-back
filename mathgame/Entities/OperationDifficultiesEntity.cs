@@ -8,5 +8,6 @@ public class OperationDifficultiesEntity
     public DifficultyEntity Difficulty { get; set; } = null!;
     public long DifficultyId { get; set; }
     public RoomEntity Room { get; set; } = null!;
+    public ICollection<QuestionEntity> Questions { get; set; } = null!;
     public OperationDifficultiesEntity() { }
 }

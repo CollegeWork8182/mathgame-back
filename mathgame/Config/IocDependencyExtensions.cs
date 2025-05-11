@@ -15,10 +15,12 @@ public static class IocDependencyExtensions
         services.AddScoped<IOperationGateway, OperationGatewayRepository>();
         services.AddScoped<ITokenGateway, TokenGateway>();
         services.AddScoped<IEmailGateway, EmailGateway>();
+        services.AddScoped<IQuestionGateway, QuestionRepositoryGateway>();
         services.AddScoped<UserService>();
         services.AddScoped<AuthService>();
         services.AddScoped<AccessCodeService>();
         services.AddScoped<RoomService>();
         services.AddScoped<QuestionService>();
+        services.AddScoped<ReportService>();
     }
 }

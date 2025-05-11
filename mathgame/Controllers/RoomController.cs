@@ -106,8 +106,29 @@ public class RoomController : ControllerBase
     /// </summary>
     /// <param name="roomId">Id da sala</param>
     [HttpGet("{roomId}")]
+    [Authorize(Roles = "ADMIN, PROFESSOR, STUDENT")]
     public async Task<ActionResult<FindByRoomIdDTO>> FindById([FromRoute] long roomId, [FromServices] RoomService roomService)
     {
         return Ok(await roomService.FindById(roomId));
+    }
+
+    /// <summary>
+    /// Altera o status de uma sala
+    /// </summary>
+    /// <remarks>
+    /// Para o status temos: STARTED, FINISHED
+    /// </remarks>
+    /// <param name="roomId">Id da sala</param>
+    [HttpPut("status/{roomId}")]
+    [Authorize(Roles = "ADMIN, PROFESSOR")]
+    public async Task<ActionResult<MessageSuccessDTO>> UpdateStatus([FromBody] UpdateStatusDTO data,  [FromRoute] long roomId, [FromServices] RoomService roomService)
+    {
+        var validator = new UpdateStatusValidator();
+        var validationResult = await validator.ValidateAsync(data);
+        if(!validationResult.IsValid)
+            throw new ValidationException(validationResult.Errors);
+        
+        await roomService.UpdateStatus(roomId, data.Status);
+        return Ok(new MessageSuccessDTO("Status alterado com sucesso"));
     }
 }

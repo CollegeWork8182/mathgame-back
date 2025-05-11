@@ -13,6 +13,9 @@ namespace mathgame.Infra.Configurations
             builder.Property(x => x.QtdResponses)
                 .IsRequired();
 
+            builder.Property(x => x.Score)
+                .IsRequired();
+
             builder.HasOne(x => x.User)
                 .WithOne(x => x.Participant)
                 .IsRequired(false)

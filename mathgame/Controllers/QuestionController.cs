@@ -49,5 +49,18 @@ public class QuestionController : ControllerBase
 
         return Ok(new MessageSuccessDTO("Resposta enviada com sucesso"));
     }
+
+    /// <summary>
+    /// Buscar todas as questões respondidas de um usuário para aquela sala
+    /// </summary>
+    /// <param name="roomId">Id da sala</param>
+    /// <param name="userId">Id do usuário</param>
+    [HttpGet("all/me/answer")]
+    [Authorize(Roles = "ADMIN, PROFESSOR")]
+    public async Task<ActionResult<FindQuestionsAnsweredDTO>> FindQuestionsAnsewered([FromQuery] long roomId, long userId,
+        [FromServices] QuestionService questionService)
+    {
+        return Ok(await questionService.FindQuestionsAnswered(roomId, userId));
+    }
     
 }

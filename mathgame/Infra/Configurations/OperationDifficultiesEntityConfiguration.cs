@@ -23,5 +23,9 @@ public class OperationDifficultiesEntityConfiguration : IEntityTypeConfiguration
         builder.HasOne(x => x.Room)
             .WithOne(x => x.OperationDifficulties)
             .HasForeignKey<RoomEntity>(x => x.OperationDifficultiesId);
+        
+        builder.HasMany(x => x.Questions)
+            .WithOne(x => x.OperationDifficulties)
+            .HasForeignKey(x => x.OperationDifficultiesId);
     }
 }

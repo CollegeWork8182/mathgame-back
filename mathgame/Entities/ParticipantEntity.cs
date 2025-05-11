@@ -4,6 +4,7 @@
     {
         public long Id { get; set; }
         public long QtdResponses { get; set; }
+        public long Score { get; set; }
         public ICollection<ResponseEntity>? Responses { get; set; } = null!;
         public UserEntity User { get; set; } = null!;
         public long UserId { get; set; }

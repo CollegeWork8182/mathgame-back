@@ -13,11 +13,6 @@ namespace mathgame.Infra.Configurations
             builder.Property(x => x.Title)
                 .HasMaxLength(10)
                 .IsRequired();
-
-            builder.HasMany(x => x.Questions)
-                .WithOne(x => x.Operation)
-                .HasForeignKey(x => x.OperationId)
-                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
