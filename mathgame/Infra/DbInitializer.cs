@@ -18,19 +18,6 @@ public static class DbInitializer
             context.SaveChanges();
         }
 
-        if (!context.Users.Any())
-        {
-            var profile = context.Profiles.FirstOrDefault(x => x.Role == "ADMIN");
-            
-            context.Users.Add(new UserEntity(
-                "dev-test",
-                "dev-test@gmail.com",
-                "Senha@123",
-                profile
-                ));
-            context.SaveChanges();
-        }
-
         // Dificuldades
         if (!context.Difficulties.Any())
         {
