@@ -10,4 +10,10 @@ public class OperationDifficultiesEntity
     public RoomEntity Room { get; set; } = null!;
     public ICollection<QuestionEntity> Questions { get; set; } = null!;
     public OperationDifficultiesEntity() { }
+
+    public OperationDifficultiesEntity(long operationId, long difficultyId)
+    {
+        OperationId = operationId;
+        DifficultyId = difficultyId;
+    }
 }

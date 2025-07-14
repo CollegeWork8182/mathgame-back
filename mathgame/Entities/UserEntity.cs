@@ -23,6 +23,14 @@ public class UserEntity
         Profile = profile;
     }
     
+    public UserEntity(string name, string email, string password,  ProfileEntity profile)
+    {
+        Name = name;
+        Email = email;
+        Password = password;
+        Profile = profile;
+    }
+    
     public UserEntity(long id, string name, string email, string password, AccessCodeEntity accessCode, ProfileEntity profile)
     {
         Id = id;

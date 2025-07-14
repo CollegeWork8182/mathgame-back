@@ -11,7 +11,7 @@ namespace mathgame.Infra.Configurations
             builder.HasKey(x => x.Id);
 
             builder.Property(x => x.Title)
-                .HasMaxLength(10)
+                .HasMaxLength(20)
                 .IsRequired();
         }
     }
