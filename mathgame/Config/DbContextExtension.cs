@@ -9,7 +9,7 @@ public static class DbContextExtension
     {
         services.AddDbContext<AppDbContext>(options =>
         {
-            options.UseSqlite(configuration.GetConnectionString("DefaultConnection"));
+            options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
         });
 
         return services;

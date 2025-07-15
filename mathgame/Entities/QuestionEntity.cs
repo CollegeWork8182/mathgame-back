@@ -33,5 +33,16 @@
             OperationDifficulties = operationDifficulties;
             Responses = responses;
         }
+
+        public QuestionEntity(string title, string correctOption, string option1, string option2, string option3, long operationDifficultiesId)
+        {
+            Title = title;
+            CorrectOption = correctOption;
+            Option1 = option1;
+            Option2 = option2;
+            Option3 = option3;
+            OperationDifficultiesId = operationDifficultiesId;
+        }
+
     }
 }

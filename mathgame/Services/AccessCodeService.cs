@@ -16,7 +16,7 @@ public class AccessCodeService(IUserGateway userGateway, IEmailGateway emailGate
         var code = new string(Enumerable.Repeat(chars, 6)
             .Select(s => s[random.Next(s.Length)]).ToArray());
 
-        var expiration = DateTime.Now.AddMinutes(5);
+        var expiration = DateTime.UtcNow.AddMinutes(5);
         
         return new AccessCodeEntity(code, true, false, expiration );
     }
